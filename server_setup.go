@@ -135,6 +135,7 @@ func (this *Server) DisconnectPeer(peerId int) error {
 	}
 	return nil
 }
+
 func (this *Server) DisconnectAll() {
 	this.mu.Lock()
 	defer this.mu.Unlock()
@@ -145,10 +146,16 @@ func (this *Server) DisconnectAll() {
 		}
 	}
 }
+
+// Register Custom Methods here:
+
+/* To actually add a delay for each request, a wrapper */
+
 func (this *Server) RequestVote(args RequestVoteArgs, reply *RequestVoteReply) error {
 	sleepMs(this.minRPCLatency + args.Latency) // Add Latency
 	return this.raftLogic.HandleRequestVote(args, reply)
 }
+
 func (this *Server) AppendEntries(args AppendEntriesArgs, reply *AppendEntriesReply) error {
 	sleepMs(this.minRPCLatency + args.Latency) // Add Latency
 	return this.raftLogic.HandleAppendEntries(args, reply)
